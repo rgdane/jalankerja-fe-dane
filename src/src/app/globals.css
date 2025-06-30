@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    @apply bg-gray-100 dark:bg-[#111a27] transition-colors duration-200 dark:text-white
+}
+
+.ant-table-tbody > tr > td, .ant-menu {
+    @apply dark:bg-[#152234] 
+  }
+
+  
+  
