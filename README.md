@@ -49,7 +49,7 @@
 └── public/                       # Folder untuk static asset (gambar, font, dll)
 ```
 
-# Using Docker
+#
 
 ## 🛠️ 1. Setup & Installation
 
