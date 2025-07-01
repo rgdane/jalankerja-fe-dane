@@ -82,7 +82,7 @@ make logs
 make help
 ```
 
-## Local Development
+## 💻 Local Development
 
 ```bash
 cd src
