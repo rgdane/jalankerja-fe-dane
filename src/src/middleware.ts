@@ -3,7 +3,7 @@ import { authMiddleware } from "./middlewares/auth";
 import { applyMiddleware } from "./middlewares";
 
 export function middleware(request: NextRequest) {
-  return applyMiddleware(request, [authMiddleware]);
+  //return applyMiddleware(request, [authMiddleware]);
 }
 
 export const config = {

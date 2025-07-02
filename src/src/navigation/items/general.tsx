@@ -24,6 +24,11 @@ export const generalGroup: MenuItem = {
       icon: <TeamOutlined />,
     },
     {
+      key: "/dashboard/user",
+      label: "User",
+      icon: <UserOutlined />,
+    },
+    {
       key: "/dashboard/project",
       label: "Project",
       icon: <AppstoreOutlined />,
