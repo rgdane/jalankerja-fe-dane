@@ -1,0 +1,75 @@
+"use client";
+import { useEffect, useState } from "react";
+import { TableBuilder } from "@/components/fragments/builder/TableBuilder";
+import { useProjectAction } from "../hook/useProject";
+import { Project } from "@/types/data/project.types";
+
+export default function ProjectList() {
+  const { fetchProjects, createProject, deleteProject, updateProject } =
+    useProjectAction();
+  const [project, setProject] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadDatas = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchProjects();
+      console.log(data);
+      setProject(data);
+    } catch (error) {
+      console.error("Failed to load datas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDatas();
+  }, []);
+
+  const handleCreate = async (data: Omit<Project, "id">) => {
+    await createProject(data);
+    await loadDatas(); // Refresh data
+  };
+
+  const handleUpdate = async (id: number, data: Partial<Project>) => {
+    await updateProject(id, data);
+    await loadDatas(); // Refresh data
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteProject(id);
+    await loadDatas(); // Refresh data
+  };
+
+  const columns = [
+    {
+      key: "nama",
+      title: "Name",
+      dataIndex: "nama",
+      editable: true,
+      placeholder: "Masukkan nama squad",
+    },
+    {
+      key: "deskripsi",
+      title: "Deskripsi",
+      dataIndex: "deskripsi",
+      editable: true,
+      placeholder: "Masukkan deskripsi",
+    },
+  ];
+
+  return (
+    <TableBuilder<Project>
+      datas={project}
+      columns={columns}
+      onCreate={handleCreate}
+      onUpdate={handleUpdate}
+      onDelete={handleDelete}
+      loading={loading}
+      addButtonText="Add Project"
+      deleteConfirmTitle="Hapus Project ini?"
+      emptyRecord={{ nama: "" }}
+    />
+  );
+}

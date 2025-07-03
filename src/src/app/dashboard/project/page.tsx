@@ -1,6 +1,6 @@
 "use client";
 
-import ProjectList from "@/features/project/components/ProjectList";
+import ProjectList from "@/features/projects/components/ProjectList";
 
 const Pages = () => {
   return (
