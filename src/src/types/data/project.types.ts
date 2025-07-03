@@ -1,8 +1,8 @@
 export type Project = {
   id: number;
-  name: string;
-  code: string;
-  description?: string;
+  nama: string;
+  kode: string;
+  deskripsi?: string;
   start_date: string;
   end_date?: string;
 };

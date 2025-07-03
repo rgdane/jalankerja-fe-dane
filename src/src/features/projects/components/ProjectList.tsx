@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { TableBuilder } from "@/components/fragments/builder/TableBuilder";
 import { useProjectAction } from "../hook/useProject";
 import { Project } from "@/types/data/project.types";
+import { formatDate } from "@/lib/formatDate";
 
 export default function ProjectList() {
   const { fetchProjects, createProject, deleteProject, updateProject } =
@@ -48,7 +49,14 @@ export default function ProjectList() {
       title: "Name",
       dataIndex: "nama",
       editable: true,
-      placeholder: "Masukkan nama squad",
+      placeholder: "Masukkan nama project",
+    },
+    {
+      key: "kode",
+      title: "Kode",
+      dataIndex: "kode",
+      editable: true,
+      placeholder: "Masukkan kode",
     },
     {
       key: "deskripsi",
@@ -56,6 +64,22 @@ export default function ProjectList() {
       dataIndex: "deskripsi",
       editable: true,
       placeholder: "Masukkan deskripsi",
+    },
+    {
+      key: "start_date",
+      title: "Tanggal Mulai",
+      dataIndex: "start_date",
+      editable: true,
+      placeholder: "Masukkan tanggal mulai",
+      render: (_: any, record: any) => formatDate(record.start_date),
+    },
+    {
+      key: "end_date",
+      title: "Tanggal Selesai",
+      dataIndex: "end_date",
+      editable: true,
+      placeholder: "Masukkan tanggal berakhir",
+      render: (_: any, record: any) => formatDate(record.end_date),
     },
   ];
 
