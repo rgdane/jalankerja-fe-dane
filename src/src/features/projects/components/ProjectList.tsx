@@ -1,27 +1,28 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSquadActions } from "../hook/useSquad";
 import { TableBuilder } from "@/components/fragments/builder/TableBuilder";
+import { useProjectAction } from "../hook/useProject";
+import { Project } from "@/types/data/project.types";
 
 export interface Squad {
   id: number;
   name: string;
 }
 
-export default function SquadList() {
-  const { fetchSquads, createSquad, deleteSquad, updateSquad } =
-    useSquadActions();
-  const [squads, setSquads] = useState<Squad[]>([]);
+export default function ProjectList() {
+  const { fetchProjects, createProject, deleteProject, updateProject } =
+    useProjectAction();
+  const [project, setProject] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
 
   const loadDatas = async () => {
     setLoading(true);
     try {
-      const data = await fetchSquads();
+      const data = await fetchProjects();
       console.log(data);
-      setSquads(data);
+      setProject(data);
     } catch (error) {
-      console.error("Failed to load squads:", error);
+      console.error("Failed to load datas:", error);
     } finally {
       setLoading(false);
     }
@@ -31,49 +32,49 @@ export default function SquadList() {
     loadDatas();
   }, []);
 
-  const handleCreate = async (data: Omit<Squad, "id">) => {
-    await createSquad(data);
+  const handleCreate = async (data: Omit<Project, "id">) => {
+    await createProject(data);
     await loadDatas(); // Refresh data
   };
 
-  const handleUpdate = async (id: number, data: Partial<Squad>) => {
-    await updateSquad(id, data);
+  const handleUpdate = async (id: number, data: Partial<Project>) => {
+    await updateProject(id, data);
     await loadDatas(); // Refresh data
   };
 
   const handleDelete = async (id: number) => {
-    await deleteSquad(id);
+    await deleteProject(id);
     await loadDatas(); // Refresh data
   };
 
-  const squadColumns = [
+  const columns = [
     {
-      key: "name",
+      key: "nama",
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "nama",
       editable: true,
       placeholder: "Masukkan nama squad",
     },
     {
-      key: "description",
+      key: "deskripsi",
       title: "Deskripsi",
-      dataIndex: "description",
+      dataIndex: "deskripsi",
       editable: true,
       placeholder: "Masukkan deskripsi",
     },
   ];
 
   return (
-    <TableBuilder<Squad>
-      datas={squads}
-      columns={squadColumns}
+    <TableBuilder<Project>
+      datas={project}
+      columns={columns}
       onCreate={handleCreate}
       onUpdate={handleUpdate}
       onDelete={handleDelete}
       loading={loading}
-      addButtonText="Add Squad"
-      deleteConfirmTitle="Hapus squad ini?"
-      emptyRecord={{ name: "" }}
+      addButtonText="Add Project"
+      deleteConfirmTitle="Hapus Project ini?"
+      emptyRecord={{ nama: "" }}
     />
   );
 }

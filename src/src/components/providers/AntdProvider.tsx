@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
-import { ConfigProvider, theme } from "antd";
+
+import React, { useEffect, useState } from "react";
+import { App, ConfigProvider, theme } from "antd";
 import { useAppSelector } from "@/store/hook";
 import type { ThemeConfig } from "antd/es/config-provider/context";
 
@@ -8,7 +9,6 @@ interface AntdConfigProviderProps {
   children: React.ReactNode;
 }
 
-// Define your custom theme tokens
 const lightTheme: ThemeConfig = {
   algorithm: theme.defaultAlgorithm,
   token: {
@@ -43,10 +43,17 @@ export const AntdProvider: React.FC<AntdConfigProviderProps> = ({
   children,
 }) => {
   const isDark = useAppSelector((state) => state.theme.isDark);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) return null;
 
   return (
     <ConfigProvider theme={isDark ? darkTheme : lightTheme}>
-      {children}
+      <App>{children}</App>
     </ConfigProvider>
   );
 };

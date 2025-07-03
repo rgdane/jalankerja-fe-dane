@@ -2,16 +2,23 @@ import axiosInstance from "@/config/axios";
 import { AppDispatch } from "@/store";
 import { AxiosResponse } from "axios";
 
+type ApiResponse<T> = {
+  success: boolean;
+  data: T;
+  message?: string;
+  error?: string;
+};
+
 type CrudService<TGet, TPost, TUpdate> = {
   local: {
-    getAll: () => Promise<AxiosResponse<TGet[]>>;
-    getById: (id: string | number) => Promise<AxiosResponse<TGet>>;
-    post: (data: TPost) => Promise<AxiosResponse<TGet>>;
+    getAll: () => Promise<AxiosResponse<ApiResponse<TGet[]>>>;
+    getById: (id: string | number) => Promise<AxiosResponse<ApiResponse<TGet>>>;
+    post: (data: TPost) => Promise<AxiosResponse<ApiResponse<TGet>>>;
     update: (
       id: string | number,
       data: TUpdate
-    ) => Promise<AxiosResponse<TGet>>;
-    remove: (id: string | number) => Promise<AxiosResponse<void>>;
+    ) => Promise<AxiosResponse<ApiResponse<TGet>>>;
+    remove: (id: string | number) => Promise<AxiosResponse<ApiResponse<void>>>;
   };
   global: {
     getAll: () => (dispatch: AppDispatch) => void;
@@ -44,23 +51,28 @@ export function createCrudService<TGet, TPost, TUpdate>(
   const { basePath, actions } = params;
 
   const local = {
-    getAll: () => axiosInstance.get<TGet[]>(basePath),
+    getAll: () => axiosInstance.get<ApiResponse<TGet[]>>(basePath),
     getById: (id: string | number) =>
-      axiosInstance.get<TGet>(`${basePath}/${id}`),
-    post: (data: TPost) => axiosInstance.post<TGet>(basePath, data),
+      axiosInstance.get<ApiResponse<TGet>>(`${basePath}/${id}`),
+    post: (data: TPost) =>
+      axiosInstance.post<ApiResponse<TGet>>(basePath, data),
     update: (id: string | number, data: TUpdate) =>
-      axiosInstance.put<TGet>(`${basePath}/${id}`, data),
-    remove: (id: string | number) => axiosInstance.delete(`${basePath}/${id}`),
+      axiosInstance.put<ApiResponse<TGet>>(`${basePath}/${id}`, data),
+    remove: (id: string | number) =>
+      axiosInstance.delete<ApiResponse<void>>(`${basePath}/${id}`),
   };
 
   const global = {
     getAll: () => (dispatch: AppDispatch) => {
       if (!actions) return;
       dispatch(actions.setLoading(true));
-      axiosInstance
-        .get<TGet[]>(basePath)
-        .then((res) => dispatch(actions.setData(res.data)))
-        .catch((err) => dispatch(actions.setError(err.message)))
+      local
+        .getAll()
+        .then((res) => dispatch(actions.setData(res.data.data)))
+        .catch((err) => {
+          const message = err?.response?.data?.error || err.message;
+          dispatch(actions.setError(message));
+        })
         .finally(() => dispatch(actions.setLoading(false)));
     },
     post: (data: TPost) => (dispatch: AppDispatch) => {
@@ -68,21 +80,30 @@ export function createCrudService<TGet, TPost, TUpdate>(
       local
         .post(data)
         .then(() => dispatch(global.getAll()))
-        .catch((err) => dispatch(actions.setError(err.message)));
+        .catch((err) => {
+          const message = err?.response?.data?.error || err.message;
+          dispatch(actions.setError(message));
+        });
     },
     update: (id: string | number, data: TUpdate) => (dispatch: AppDispatch) => {
       if (!actions) return;
       local
         .update(id, data)
         .then(() => dispatch(global.getAll()))
-        .catch((err) => dispatch(actions.setError(err.message)));
+        .catch((err) => {
+          const message = err?.response?.data?.error || err.message;
+          dispatch(actions.setError(message));
+        });
     },
     remove: (id: string | number) => (dispatch: AppDispatch) => {
       if (!actions) return;
       local
         .remove(id)
         .then(() => dispatch(global.getAll()))
-        .catch((err) => dispatch(actions.setError(err.message)));
+        .catch((err) => {
+          const message = err?.response?.data?.error || err.message;
+          dispatch(actions.setError(message));
+        });
     },
   };
 

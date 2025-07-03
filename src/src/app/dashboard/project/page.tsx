@@ -1,7 +1,14 @@
+"use client";
+
+import ProjectList from "@/features/projects/components/ProjectList";
+
 const Pages = () => {
   return (
     <>
-      <div className="">Projects</div>
+      <div className="p-8">
+        <h1 className="text-3xl font-black">Project Management</h1>
+        <ProjectList />
+      </div>
     </>
   );
 };
