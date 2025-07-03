@@ -28,13 +28,13 @@ export default function ProjectForm() {
       rules: [{ required: true, message: "Please input project description" }],
     },
     {
-      name: "startDate",
+      name: "start_date",
       label: "Start Date",
       type: "date",
       rules: [{ required: true, message: "Please input project start date" }],
     },
     {
-      name: "endDate",
+      name: "end_date",
       label: "End Date",
       type: "date",
       rules: [{ required: true, message: "Please input project end date" }],

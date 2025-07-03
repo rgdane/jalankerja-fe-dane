@@ -2,11 +2,8 @@
 import { useEffect, useState } from "react";
 import { useSquadActions } from "../hook/useSquad";
 import { TableBuilder } from "@/components/fragments/builder/TableBuilder";
+import { Squad } from "@/types/data/squad.types";
 
-export interface Squad {
-  id: number;
-  name: string;
-}
 
 export default function SquadList() {
   const { fetchSquads, createSquad, deleteSquad, updateSquad } =
