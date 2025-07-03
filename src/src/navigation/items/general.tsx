@@ -33,5 +33,10 @@ export const generalGroup: MenuItem = {
       label: "Project",
       icon: <AppstoreOutlined />,
     },
+    {
+      key: "/dashboard/category",
+      label: "Kategori",
+      icon: <AppstoreOutlined />,
+    },
   ],
 };
