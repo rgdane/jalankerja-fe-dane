@@ -140,8 +140,8 @@ export default function ProjectList() {
     },
     {
       title: "Start Date",
-      dataIndex: "startDate",
-      key: "startDate",
+      dataIndex: "start_date",
+      key: "start_date",
       render: (_value, record) =>
         record.isNew || isEditMode ? (
           <Input
