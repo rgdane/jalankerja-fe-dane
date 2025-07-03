@@ -4,11 +4,6 @@ import { TableBuilder } from "@/components/fragments/builder/TableBuilder";
 import { useProjectAction } from "../hook/useProject";
 import { Project } from "@/types/data/project.types";
 
-export interface Squad {
-  id: number;
-  name: string;
-}
-
 export default function ProjectList() {
   const { fetchProjects, createProject, deleteProject, updateProject } =
     useProjectAction();
